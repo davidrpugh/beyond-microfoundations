@@ -18,12 +18,13 @@ ax.set_yscale('log')
 ax.set_ylim(8000, 64000)
 ax.set_yticks([8000, 16000, 32000, 64000])
 ax.set_yticklabels([8000, 16000, 32000, 64000])
-ax.set_title("Real GDP per Capita in the United States (USARGDPC)\nSource: U.S. Department of Labor, BLS (via FRED)", weight='bold')
+ax.set_title("Real GDP per Person in the United States (USARGDPC)\nSource: U.S. Department of Labor, BLS (via FRED)", weight='bold')
 ax.grid()
 
 # load the NBER recession dates
 NBER_Dates = pd.read_csv('NBER Dates.txt')
 
+# for loop generates recession bands!
 for i in range(NBER_Dates.shape[0]):
     ax.axvspan(NBER_Dates['Peak'][i], NBER_Dates['Trough'][i], facecolor='grey', alpha=0.5)
     
