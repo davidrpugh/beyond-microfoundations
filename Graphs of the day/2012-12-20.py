@@ -70,7 +70,7 @@ ax2.set_ylabel(r'Labor, $L_{t}$')
 fig.colorbar(production_frontier, shrink=0.75, aspect=10)
 
 # add a title to the figure
-fig.text(0.5, 0.95, r'$F(K,\ L)$ for $\alpha=%.2f, A=%.2f$' %(alpha, A), fontsize=20, \
+fig.text(0.5, 0.95, r'$F(K,\ L)=K^{\alpha}(AL)^{1 - \alpha}$ for $\alpha=%.2f, A=%.2f$' %(alpha, A), fontsize=20, \
          ha='center')
 
 # save the plot!
