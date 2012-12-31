@@ -39,7 +39,7 @@ COE_share.plot()
 
 # add labels, axes, title, etc
 plt.ylabel("COE Share")
-plt.title("Emplpoyee compensation share of U.S. GDP\n" +\
+plt.title("Employee compensation share of U.S. GDP\n" +\
           "Source: U.S. Department of Commerce, BEA (via FRED)",
           weight='bold')
 plt.grid()
@@ -58,7 +58,7 @@ COE_share['1973-01-01':].plot()
 
 # add labels, axes, title, etc
 plt.ylabel("COE Share")
-plt.title("Emplpoyee compensation share of U.S. GDP\n" +\
+plt.title("Employee compensation share of U.S. GDP\n" +\
           "Source: U.S. Department of Commerce, BEA (via FRED)",
           weight='bold')
 plt.grid()
@@ -78,7 +78,7 @@ labors_share.plot()
 # add labels, axes, title, etc
 plt.ylabel(r"COE Share")
 plt.ylim(0, 1)
-plt.title("Emplpoyee compensation share of U.S. GDP\n" +\
+plt.title("Employee compensation share of U.S. GDP\n" +\
           "Source: U.S. Department of Commerce, BEA (via FRED)",
           weight='bold')
 plt.grid()

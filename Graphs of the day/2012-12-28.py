@@ -20,26 +20,29 @@ Inflation_CPIAUCSL = CPIAUCSL.pct_change(periods=12)
 Inflation_CPIAUCNS = CPIAUCNS.pct_change(periods=12)
 Inflation_GDPDEF = GDPDEF.pct_change(periods=4)
 
+# Combine the three Series objects into a single DataFrame
+Inflation_Measures = Inflation_CPIAUCNS
+Inflation_Measures['CPIAUCSL'] = Inflation_CPIAUCSL
+Inflation_Measures['GDPDEF'] = Inflation_GDPDEF
+
 ##### plot the data #####
 
 # basic plot in one line of code!
-fig = plt.figure()
-ax = Inflation_CPIAUCSL.plot(legend=False, label='SA')
-#CPIAUCNS.plot(legend=False, label='NSA')
+Inflation_Measures.plot(markersize=3, style='o-', alpha=0.75)
 
 # add labels, axes, title, etc
-ax.set_ylabel("Inflation (% Change from a year ago)")
-ax.set_title("Measure of historical inflation inthe U.S\nSource: U.S. Department of Labor, BLS (via FRED)",
-             weight='bold')
-ax.grid()
+plt.ylabel("Inflation (% Change from a year ago)")
+plt.title("Measures of historical inflation in the U.S\nSource: U.S. Department of Labor, BLS (via FRED)",
+      weight='bold')
+plt.grid()
 
 # load the NBER recession dates
 NBER_Dates = pd.read_csv('NBER Dates.txt')
 
-# for loop generates recession bands!
+# for loop generates recession band!s
 for i in range(NBER_Dates.shape[0]):
-    ax.axvspan(NBER_Dates['Peak'][i], NBER_Dates['Trough'][i], facecolor='grey', alpha=0.5)
+    plt.axvspan(NBER_Dates['Peak'][i], NBER_Dates['Trough'][i], facecolor='grey', alpha=0.5)
     
 # save the figure and display
-#plt.savefig('2012-12-28-Mankiw-Figure-1-2.png')
+plt.savefig('2012-12-28-Mankiw-Figure-1-2.png')
 plt.show()

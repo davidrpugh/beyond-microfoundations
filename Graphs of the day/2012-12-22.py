@@ -123,7 +123,7 @@ fig.text(0.5, 0.95, 'Isoquants and isocosts lines for CRTS Cobb-Douglas producti
          fontsize=20, ha='center')
 
 # Save figure
-plt.savefig('2012-12-22-Contour-Plots-Output-Costs.png')
+plt.savefig('2012-12-22-Contour-plots-for-output-and-costs.png')
     
 # display plot
 plt.show()
