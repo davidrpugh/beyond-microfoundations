@@ -1,52 +1,90 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import wbdata
 
 ##### Extract data from World Bank API #####
 
-# ISO country codes for all countries and regional aggregates
-all_countries = [i['id'] for i in wbdata.get_country('all', display=False)]
+# Want to grab measure of inflation (for comparison purposes)
+indicators = {"FP.CPI.TOTL.ZG": "value"}
 
-# Don't want any regional aggregates
-not_countries = ['ARB', 'CSS', 'EAP', 'EAS', 'ECA', 'ECS', 'EMU', 'EUU', 'HIC',
-                 'HPC', 'INX', 'LAC', 'LCN', 'LDC', 'LIC', 'LMC', 'LMY', 'MEA',
-                 'MEA', 'MIC', 'MNA', 'NOC', 'OEC', 'OED', 'OSS', 'PSS', 'SSA',
-                 'SSF', 'SST', 'UMC', 'WLD']
+# Low income countries
+LIC_countries = [country['id'] for country in wbdata.get_country(incomelevel="LIC", display=False)]
+LIC_df = wbdata.get_dataframe(indicators, country=LIC_countries, convert_date=False)
 
-# Keep only valid countries
-valid_countries = [iso3 for iso3 in all_countries if iso3 not in not_countries]
-                   
-# Want to grab two different measures of inflation
-indicators = {"FP.CPI.TOTL.ZG": "Inflation, consumer prices (annual %)",
-              "NY.GDP.DEFL.KD.ZG": "Inflation, GDP deflator (annual %)"}
+# Lower Middle income countries
+LMC_countries = [country['id'] for country in wbdata.get_country(incomelevel="LMC", display=False)]
+LMC_df = wbdata.get_dataframe(indicators, country=LMC_countries, convert_date=False)
 
-# Dump the output into a Pandas DataFrame
-df = wbdata.get_dataframe(indicators, valid_countries, convert_date=False)
+# Upper Middle income countries
+UMC_countries = [country['id'] for country in wbdata.get_country(incomelevel="UMC", display=False)]
+UMC_df = wbdata.get_dataframe(indicators, country=UMC_countries, convert_date=False)
+
+# High income countries
+HIC_countries = [country['id'] for country in wbdata.get_country(incomelevel="HIC", display=False)]
+HIC_df = wbdata.get_dataframe(indicators, country=HIC_countries, convert_date=False)
 
 ##### plot FP.CPI.TOTL.ZG ####
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
-for country in np.unique(df['country'].values):
+# add LIC inflation data
+for country in np.unique(LIC_df['country'].values):
     # extract subset for given country
-    tmp_data = df[df['country'] == country]
+    mask = (LIC_df['country'] == country)
+    tmp_data = LIC_df[mask]
 
     # plot inflation data
-    ax.plot(tmp_data['date'].values,
-            tmp_data['Inflation, consumer prices (annual %)'].values,
-            'r-', alpha = 0.10) 
+    LIC_plot, = ax.plot(tmp_data['date'].values, tmp_data['value'].values,
+                        color=cm.jet(0), alpha = 0.25) 
+# Label the LICs
+LIC_plot.set_label('Low')
+    
+# add LMC inflation data
+for country in np.unique(LMC_df['country'].values):
+    # extract subset for given country
+    mask = (LMC_df['country'] == country)
+    tmp_data = LMC_df[mask]
 
-    if np.isnan(tmp_data['Inflation, consumer prices (annual %)'].values[-1]) == False:
-        x = tmp_data['date'].values[-1]
-        y = tmp_data['Inflation, consumer prices (annual %)'].values[-1]
-        print x
-        print y
-        #ax.text(x, y, country)
-        
+    # plot inflation data
+    LMC_plot, = ax.plot(tmp_data['date'].values, tmp_data['value'].values,
+                        color=cm.jet(85), alpha = 0.25) 
+# Label the LMC plot
+LMC_plot.set_label('Lower-Middle')
+
+# add UMC inflation data
+for country in np.unique(UMC_df['country'].values):
+    # extract subset for given country
+    mask = (UMC_df['country'] == country)
+    tmp_data = UMC_df[mask]
+
+    # plot inflation data
+    UMC_plot, = ax.plot(tmp_data['date'].values, tmp_data['value'].values,
+                        color=cm.jet(170), alpha = 0.25) 
+# Label the UMC plot
+UMC_plot.set_label('Upper-Middle')
+
+# add HIC countries    
+for country in np.unique(HIC_df['country'].values):
+    # extract subset for given country
+    mask = (HIC_df['country'] == country)
+    tmp_data = HIC_df[mask]
+
+    # plot inflation data
+    HIC_plot, = ax.plot(tmp_data['date'].values, tmp_data['value'].values,
+                        color=cm.jet(255), alpha = 0.25) 
+# Label the HIC plot
+HIC_plot.set_label('High')
+
 # axes, labels, title, legend, etc
 ax.set_xlabel('Year')
 ax.set_xlim(1960, 2012)
 ax.set_ylabel("Inflation, consumer prices (annual %)")
+ax.set_ylim(-200, 1000)
+ax.set_title('Global Inflation by Income Group\nSource: World Bank, WDI',
+             weight='bold', fontsize=15)
+ax.legend(loc=3, frameon=False, ncol=4, mode="expand")
 
+# save the figure and display...
+plt.savefig('2013-01-01-Global-Inflation-by-Income-Groups.png')
 plt.show()
