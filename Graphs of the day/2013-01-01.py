@@ -25,6 +25,9 @@ UMC_df = wbdata.get_dataframe(indicators, country=UMC_countries, convert_date=Fa
 HIC_countries = [country['id'] for country in wbdata.get_country(incomelevel="HIC", display=False)]
 HIC_df = wbdata.get_dataframe(indicators, country=HIC_countries, convert_date=False)
 
+# World
+WLD = wbdata.get_dataframe(indicators, country='WLD', convert_date=False)
+
 ##### plot FP.CPI.TOTL.ZG ####
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -77,15 +80,19 @@ for country in np.unique(HIC_df['country'].values):
 # Label the HIC plot
 HIC_plot.set_label('High')
 
+# add global inflation
+ax.plot(WLD['data'].values, WLD['value'].values, 'k-', label='World')
+
 # axes, labels, title, legend, etc
 ax.set_xlabel('Year')
 ax.set_xlim(1960, 2012)
 ax.set_ylabel("Inflation, consumer prices (annual %)")
-ax.set_ylim(-200, 1000)
+#ax.set_ylim(-200, 1000)
+ax.set_yscale('symlog')
 ax.set_title('Global Inflation by Income Group\nSource: World Bank, WDI',
              weight='bold', fontsize=15)
-ax.legend(loc=3, frameon=False, ncol=4, mode="expand")
+ax.legend(loc=3, frameon=False, ncol=5, mode="expand")
 
 # save the figure and display...
-plt.savefig('2013-01-01-Global-Inflation-by-Income-Groups.png')
+#plt.savefig('2013-01-01-Global-Inflation-by-Income-Groups.png')
 plt.show()
